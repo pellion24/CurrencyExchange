@@ -11,13 +11,14 @@ import SwiftUI
 struct ExchangeRateView: View {
     let currency: String
     let rate: Double
+    let base: String
 
     var body: some View {
         VStack {
             Text("\(currency) Exchange Rate")
                 .font(.title)
                 .padding()
-            Text("1 JPY = \(rate, specifier: "%.4f") \(currency)")
+            Text("1 \(base) = \(rate, specifier: "%.4f") \(currency)")
                 .font(.largeTitle)
                 .padding()
         }
@@ -25,5 +26,5 @@ struct ExchangeRateView: View {
 }
 
 #Preview {
-    ExchangeRateView(currency: "usd", rate: 6.0)
+    ExchangeRateView(currency: "usd", rate: 6.0, base: "credits")
 }

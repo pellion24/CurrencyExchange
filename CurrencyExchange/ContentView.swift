@@ -12,16 +12,23 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = API()
+    @State private var baseCurrency = "USD"
 
-    @State private var countryNames = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "BRR", "INR"]
-    @State private var countryFlags = ["usd", "eur", "gbp", "jpy", "chf", "cad", "aud", "nzd", "brr", "inr"]
+    @State private var countryNames = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "BRL", "INR"]
+    @State private var countryFlags = ["usd", "eur", "gbp", "jpy", "chf", "cad", "aud", "nzd", "brl", "inr"]
 
     var body: some View {
         NavigationView {
             VStack {
-                Text("Select your country")
+                Text("Enter your base currency")
+                
+                
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
+                Text("Select the country you are visiting")
                 List(countryNames, id: \.self) { country in
-                    NavigationLink(destination: ExchangeRateView(currency: "USD", rate: viewModel.rates["usd"] ?? 0.0)) {
+                    NavigationLink(destination: ExchangeRateView(currency: country, rate: viewModel.rates[country.lowercased()] ?? 0.0, base: baseCurrency)) {
                         HStack {
                             Text(country)
                             Spacer()
@@ -33,7 +40,7 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                viewModel.fetchRates()
+                viewModel.fetchRates(for: baseCurrency.lowercased())
             }
             .padding()
         }
